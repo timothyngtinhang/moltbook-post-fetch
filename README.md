@@ -48,12 +48,6 @@ python3 -m pip install -r requirements.txt
 
 ## Run
 
-From this folder:
-
-```bash
-cd /home/ubuntu/Data_fetch/moltbook-post-fetch
-```
-
 Fetch both posts and comments:
 
 ```bash
@@ -75,38 +69,41 @@ python3 fetch_moltbook.py --fetch posts
 By default, the script uses:
 
 ```text
-../post_ids.csv
-../moltbook_fetched.db
+examples/post_ids.csv
+output/moltbook_fetched.db
 ```
 
-That means the code lives in this repo:
+The CSV is the input list of post IDs. The SQLite database is the local output
+file where fetched posts, fetched comments, and progress status are stored.
 
 ```text
-/home/ubuntu/Data_fetch/moltbook-post-fetch
+examples/post_ids.csv          # sample input committed to Git
+output/moltbook_fetched.db     # local output ignored by Git
 ```
-
-but the real input/output files live one folder above it:
-
-```text
-/home/ubuntu/Data_fetch/post_ids.csv
-/home/ubuntu/Data_fetch/moltbook_fetched.db
-```
-
-The CSV is the input list of post IDs. The SQLite database is the output file
-where fetched posts, fetched comments, and progress status are stored.
 
 You can override those paths:
 
 ```bash
-python3 fetch_moltbook.py --csv ../post_ids.csv --db ../moltbook_fetched.db
+python3 fetch_moltbook.py --csv path/to/post_ids.csv --db output/custom_fetch.db
 ```
 
 This is useful if you want to test on a smaller CSV or write to a temporary
 database first:
 
 ```bash
-python3 fetch_moltbook.py --csv small_test_posts.csv --db test_fetch.db
+python3 fetch_moltbook.py --csv examples/post_ids.csv --db output/test_fetch.db
 ```
+
+## Reset Local Data
+
+The database stores both fetched data and fetch progress. If you want to rerun
+everything from the beginning, remove the local database:
+
+```bash
+rm output/moltbook_fetched.db
+```
+
+The next run will create a fresh database and fetch all post IDs again.
 
 ## Git Notes
 
@@ -118,14 +115,15 @@ requirements.txt
 README.md
 .env.example
 .gitignore
+examples/post_ids.csv
+output/.gitkeep
 ```
 
 Do not commit these:
 
 ```text
 .env
-*.db
-*.db-wal
-*.db-shm
+output/*.db
+output/*.db-*
 nohup.out
 ```

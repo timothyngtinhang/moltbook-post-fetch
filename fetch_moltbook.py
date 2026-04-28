@@ -14,8 +14,8 @@ from requests.adapters import HTTPAdapter
 from urllib3.util import Retry
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-DEFAULT_CSV = PROJECT_ROOT.parent / "post_ids.csv"
-DEFAULT_DB = PROJECT_ROOT.parent / "moltbook_fetched.db"
+DEFAULT_CSV = PROJECT_ROOT / "examples/post_ids.csv"
+DEFAULT_DB = PROJECT_ROOT / "output/moltbook_fetched.db"
 DEFAULT_ENV = PROJECT_ROOT / ".env"
 
 BASE_URL = "https://moltbook.com/api/v1/"
@@ -59,13 +59,13 @@ def parse_args() -> argparse.Namespace:
         "--csv",
         type=Path,
         default=DEFAULT_CSV,
-        help="CSV of post IDs. Default: ../post_ids.csv.",
+        help="CSV of post IDs. Default: examples/post_ids.csv.",
     )
     parser.add_argument(
         "--db",
         type=Path,
         default=DEFAULT_DB,
-        help="SQLite DB path. Default: ../moltbook_fetched.db.",
+        help="SQLite DB path. Default: output/moltbook_fetched.db.",
     )
     parser.add_argument(
         "--rate",
@@ -78,7 +78,7 @@ def parse_args() -> argparse.Namespace:
 
 def setup_logging() -> None:
     logging.basicConfig(
-        level=logging.WARNING,
+        level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
     )
 
@@ -91,7 +91,6 @@ class MoltbookClient:
     def __init__(self, api_key: str, rate_per_minute: int) -> None:
         self.rate_per_minute = rate_per_minute
         self.session = requests.Session()
-        self.client = 
         self.session.headers.update({"Authorization": f"Bearer {api_key}"})
 
         retry_strategy = Retry(
