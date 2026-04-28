@@ -22,6 +22,9 @@ BASE_URL = "https://moltbook.com/api/v1/"
 DEFAULT_RATE_PER_MINUTE = 50
 REQUEST_TIMEOUT = (5, 30)
 
+SERVER_RETRY_WAIT_SECONDS = 60 * 5       # 5 minutes 
+SERVER_RETRY_MAX_SECONDS = 24 * 60 * 60  # 1 day
+
 
 def main() -> None:
     args = parse_args()
@@ -103,10 +106,21 @@ class MoltbookClient:
         self.session.mount("https://", adapter)
 
     def fetch_json(self, url: str) -> dict:
-        response = self.session.get(url, timeout=REQUEST_TIMEOUT)
-        response.raise_for_status()
-        time.sleep(60 / self.rate_per_minute)
-        return response.json()
+        server_dead_count = 0
+        while True:
+            try:
+                response = self.session.get(url, timeout=REQUEST_TIMEOUT)
+                response.raise_for_status()
+                time.sleep(60 / self.rate_per_minute)
+                return response.json()
+            except requests.RequestException as e:
+                logging.error("Request failed for %s: %s", url, e)
+                server_dead_count += 1
+                time.sleep(SERVER_RETRY_WAIT_SECONDS)
+                if server_dead_count * SERVER_RETRY_WAIT_SECONDS > SERVER_RETRY_MAX_SECONDS:
+                    raise RuntimeError(
+                        f"Server seems unresponsive after 1 day. Abort"
+                    )
 
     def get_post(self, post_id: str) -> dict:
         return self.fetch_json(f"{BASE_URL}posts/{post_id}")
