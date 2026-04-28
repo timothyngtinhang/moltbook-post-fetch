@@ -1,0 +1,16 @@
+.env
+.venv/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.bak
+*.bak.*
+*.log
+nohup.out
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
