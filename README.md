@@ -160,8 +160,7 @@ python3 raw2ready.py \
   --ready-db output/ready.db
 ```
 
-The resulting `ready.db` can be found in   
-[kaggle dataset]((https://www.kaggle.com/datasets/timothyngtinhang/moltbook-posts-and-comments-april-110-2026).
+The resulting `ready.db` can be found in [kaggle](https://www.kaggle.com/datasets/timothyngtinhang/moltbook-posts-and-comments-april-110-2026).
 
 ## Reset Local Data
 
