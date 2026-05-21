@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import csv
 import json
@@ -15,7 +17,7 @@ from urllib3.util import Retry
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 DEFAULT_CSV = PROJECT_ROOT / "examples/post_ids.csv"
-DEFAULT_DB = PROJECT_ROOT / "output/moltbook_fetched.db"
+DEFAULT_DB = PROJECT_ROOT / "output/raw.db"
 DEFAULT_ENV = PROJECT_ROOT / ".env"
 
 BASE_URL = "https://moltbook.com/api/v1/"
@@ -33,6 +35,14 @@ def main() -> None:
     load_dotenv()
     api_key = os.environ["MOLTBOOK_API_KEY"]
     post_ids = read_post_ids(args.csv)
+
+    if args.db.exists():
+        logging.warning(
+            "Output database already exists: %s. Continuing from existing "
+            "fetch_status and appending any new fetched rows; existing rows "
+            "will not be overwritten.",
+            args.db,
+        )
 
     client = MoltbookClient(api_key, rate_per_minute=args.rate)
     db = MoltbookDatabase(args.db)
@@ -68,7 +78,7 @@ def parse_args() -> argparse.Namespace:
         "--db",
         type=Path,
         default=DEFAULT_DB,
-        help="SQLite DB path. Default: output/moltbook_fetched.db.",
+        help="SQLite DB path. Default: output/raw.db.",
     )
     parser.add_argument(
         "--rate",
