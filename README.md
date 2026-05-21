@@ -6,8 +6,6 @@ A reproducible SQLite-based workflow for fetching Moltbook posts and comments fr
 
 Post and comment availability on Moltbook can depend on when the data is fetched. This repo provides a reproducible local workflow for fetching the latest available post/comment data from a known list of post IDs, storing raw API responses in SQLite, and tracking fetch progress so long-running jobs can resume safely.
 
-For a source list of post IDs, see the Moltbook Observatory archive or provide your own CSV.
-
 The workflow is designed around two steps:
 
 1. Fetch the latest available post/comment API responses into `output/raw.db`
@@ -28,10 +26,9 @@ If you need a source list of Moltbook post IDs, refer to [`moltbook-observatory-
 ## Main files
 
 ```text
-
 fetch_moltbook.py   # fetch posts/comments from the Moltbook API into raw.db
-
 raw2ready.py        # convert raw.db into cleaned relational tables in ready.db
+```
 Read that file from top to bottom. It is organized in the same order the program runs:
 
 ```text
@@ -163,8 +160,8 @@ python3 raw2ready.py \
   --ready-db output/ready.db
 ```
 
-`output/ready.db` is the file used by `moltbook-post-analysis` and the file to
-publish with the analysis dataset.
+The resulting `ready.db` can be found in   
+[kaggle dataset]((https://www.kaggle.com/datasets/timothyngtinhang/moltbook-posts-and-comments-april-110-2026).
 
 ## Reset Local Data
 
