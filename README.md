@@ -148,14 +148,6 @@ python3 raw2ready.py \
 `output/ready.db` is the file used by `moltbook-post-analysis` and the file to
 publish with the analysis dataset.
 
-If posts and comments were fetched into separate databases, `temp_merge_db.sql`
-is a helper for merging `output/posts.db` and `output/comments.db` into
-`output/raw.db`:
-
-```bash
-sqlite3 output/raw.db < temp_merge_db.sql
-```
-
 ## Reset Local Data
 
 The database stores both fetched data and fetch progress. If you want to rerun
@@ -174,7 +166,6 @@ Commit these:
 ```text
 fetch_moltbook.py
 raw2ready.py
-temp_merge_db.sql
 requirements.txt
 README.md
 .env.example
