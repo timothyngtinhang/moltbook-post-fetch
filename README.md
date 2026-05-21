@@ -1,19 +1,37 @@
 # Moltbook Post Fetch
 
-One clear script for fetching Moltbook posts and comments into a local SQLite
-database.
+A small, reproducible workflow for fetching the latest available Moltbook post and comment data from a known list of post IDs, storing raw API responses in SQLite, and preparing cleaned relational tables for downstream analysis.
 
-When you run the script, it reads post IDs from a CSV file, calls the Moltbook
-API for each post, and saves the returned post/comment data into SQLite. It also
-keeps a small `fetch_status` table so the job can pick up where it left off
-instead of starting over every time.
+## Why this repo exists
 
-The main file is:
+Moltbook post and comment data can change depending on when the API is queried. Posts may continue receiving comments after they first appear, so a dataset collected at one point in time may not contain the same post-comment state as a later API fetch.
+
+This repo provides a simple local workflow for re-fetching Moltbook posts and comments from a known list of post IDs. It stores the raw API responses in SQLite and keeps a `fetch_status` table so fetching can be resumed, audited, and reproduced more easily.
+
+The workflow is designed around two steps:
+
+1. Fetch the latest available post/comment API responses into `output/raw.db`
+2. Convert the raw database into an analysis-ready SQLite database, `output/ready.db`
+
+If you need a source list of Moltbook post IDs, refer to [`moltbook-observatory-archive`](https://huggingface.co/datasets/SimulaMet/moltbook-observatory-archive). This repo assumes that you already have a CSV of post IDs and focuses on fetching the corresponding post/comment data from the live API.
+
+## Database outputs
+
+`fetch_moltbook.py` creates `output/raw.db` with:
+
+- `posts`: raw post API responses
+- `comments`: raw comment API responses
+- `fetch_status`: progress tracking for resumable fetching
+
+`raw2ready.py` creates `output/ready.db` with cleaned relational tables for analysis.
+
+## Main files
 
 ```text
-fetch_moltbook.py
-```
 
+fetch_moltbook.py   # fetch posts/comments from the Moltbook API into raw.db
+
+raw2ready.py        # convert raw.db into cleaned relational tables in ready.db
 Read that file from top to bottom. It is organized in the same order the program runs:
 
 ```text
