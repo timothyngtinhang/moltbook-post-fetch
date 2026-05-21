@@ -1,12 +1,12 @@
 # Moltbook Post Fetch
 
-A small, reproducible workflow for fetching the latest available Moltbook post and comment data from a known list of post IDs, storing raw API responses in SQLite, and preparing cleaned relational tables for downstream analysis.
+A reproducible SQLite-based workflow for fetching Moltbook posts and comments from a list of post IDs.
 
 ## Why this repo exists
 
-Moltbook post and comment data can change depending on when the API is queried. Posts may continue receiving comments after they first appear, so a dataset collected at one point in time may not contain the same post-comment state as a later API fetch.
+Post and comment availability on Moltbook can depend on when the data is fetched. This repo provides a reproducible local workflow for fetching the latest available post/comment data from a known list of post IDs, storing raw API responses in SQLite, and tracking fetch progress so long-running jobs can resume safely.
 
-This repo provides a simple local workflow for re-fetching Moltbook posts and comments from a known list of post IDs. It stores the raw API responses in SQLite and keeps a `fetch_status` table so fetching can be resumed, audited, and reproduced more easily.
+For a source list of post IDs, see the Moltbook Observatory archive or provide your own CSV.
 
 The workflow is designed around two steps:
 
