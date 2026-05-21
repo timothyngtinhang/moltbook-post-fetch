@@ -117,7 +117,7 @@ database:
 python3 raw2ready.py
 ```
 
-The fetched database must contain both `posts` and `comments` rows. If you
+The fetched database should contain both `posts` and `comments` rows. If you
 previously fetched only comments, fetch posts before preparing the analysis
 database:
 
@@ -158,27 +158,3 @@ rm output/raw.db
 ```
 
 The next run will create a fresh database and fetch all post IDs again.
-
-## Git Notes
-
-Commit these:
-
-```text
-fetch_moltbook.py
-raw2ready.py
-requirements.txt
-README.md
-.env.example
-.gitignore
-examples/post_ids.csv
-output/.gitkeep
-```
-
-Do not commit these:
-
-```text
-.env
-output/*.db
-output/*.db-*
-nohup.out
-```
